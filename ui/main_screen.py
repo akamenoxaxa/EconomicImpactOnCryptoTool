@@ -1,15 +1,23 @@
 import customtkinter as ctk
 from calendar import monthcalendar
 from datetime import datetime
+import tkinter as tk
 
 class MainScreen(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
 
+        # Prevent resizing of the window
+        self.parent.geometry("1280x720")  # Fixed size (16:9 aspect ratio)
+        self.parent.resizable(False, False)
+
+        # Center the window on the screen
+        self.center_window()
+
         # Layout Configuration
         self.grid_columnconfigure(0, weight=1)  # Left: Country and Indicators
-        self.grid_columnconfigure(1, weight=2)  # Middle: Update Button
+        self.grid_columnconfigure(1, weight=2)  # Middle: Historical Data
         self.grid_columnconfigure(2, weight=3)  # Right: Calendar
 
         # Left: Country and Indicator Selection
@@ -36,7 +44,8 @@ class MainScreen(ctk.CTkFrame):
         self.indicator_group_label.pack(pady=10)
 
         self.indicator_group_dropdown = ctk.CTkOptionMenu(
-            self.left_frame, values=["Main", "Labour", "Prices", "Trade", "GDP", "Government", "Housing", "Consumer", "Taxes"],
+            self.left_frame,
+            values=["Main", "Labour", "Prices", "Trade", "GDP", "Government", "Housing", "Consumer", "Taxes"],
             command=self.on_group_selected
         )
         self.indicator_group_dropdown.pack(pady=10)
@@ -45,16 +54,13 @@ class MainScreen(ctk.CTkFrame):
         self.indicator_buttons_frame = ctk.CTkFrame(self.left_frame)
         self.indicator_buttons_frame.pack(pady=10)
 
-        # Middle: Update Button and Data Display
-        self.update_button = ctk.CTkButton(self, text="Update", command=self.update_data)
-        self.update_button.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+        # Middle: Historical Data Display
+        self.historical_data_frame = ctk.CTkFrame(self)
+        self.historical_data_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+        self.historical_data_label = ctk.CTkLabel(self.historical_data_frame, text="", font=("Arial", 14))
+        self.historical_data_label.pack(pady=10)
 
-        self.data_display = ctk.CTkFrame(self)
-        self.data_display.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
-        self.data_label = ctk.CTkLabel(self.data_display, text="", font=("Arial", 14))
-        self.data_label.pack(pady=10)
-
-        # Right: Calendar (Bigger size)
+        # Right: Calendar
         self.calendar_frame = ctk.CTkFrame(self, corner_radius=10)
         self.calendar_frame.grid(row=0, column=2, sticky="nsew", padx=10, pady=10)
 
@@ -65,6 +71,15 @@ class MainScreen(ctk.CTkFrame):
         self.calendar_days.pack(pady=20)
 
         self.show_calendar()
+
+    def center_window(self):
+        """Center the window on the screen."""
+        self.parent.update_idletasks()
+        width = 1280
+        height = 720
+        x = (self.parent.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.parent.winfo_screenheight() // 2) - (height // 2)
+        self.parent.geometry(f"{width}x{height}+{x}+{y}")
 
     def on_country_selected(self, country):
         print(f"Selected Country: {country}")
@@ -92,23 +107,42 @@ class MainScreen(ctk.CTkFrame):
             button = ctk.CTkButton(
                 self.indicator_buttons_frame,
                 text=indicator,
-                command=lambda ind=indicator: self.on_indicator_selected(ind)
+                command=lambda ind=indicator: self.on_indicator_selected(ind),
+                width=200  # Fixed button width to avoid resizing
             )
             button.pack(pady=5)
 
     def on_indicator_selected(self, indicator):
         print(f"Selected Indicator: {indicator}")
-        self.data_label.configure(text=f"Data for: {indicator}")
-        self.update_calendar(indicator)
+        self.show_historical_data(indicator)
 
-    def update_data(self):
-        country = self.country_dropdown.get()
-        group = self.indicator_group_dropdown.get()
-        print(f"Updating data for Country: {country}, Group: {group}")
+    def show_historical_data(self, indicator):
+        # Clear existing historical data
+        for widget in self.historical_data_frame.winfo_children():
+            widget.destroy()
 
-    def update_calendar(self, indicator):
-        # Placeholder: Highlight dates in the calendar based on the indicator
-        self.show_calendar()
+        # Add a title
+        title = ctk.CTkLabel(self.historical_data_frame, text=f"Historical Data for {indicator}", font=("Arial", 16))
+        title.pack(pady=10)
+
+        # Sample Historical Data Blocks
+        samples = [
+            {"date": "2023-01-01", "impact": "Positive"},
+            {"date": "2022-12-01", "impact": "Neutral"},
+            {"date": "2022-11-01", "impact": "Negative"},
+            {"date": "2022-10-01", "impact": "Positive"},
+        ]
+
+        for sample in samples:
+            block = ctk.CTkFrame(self.historical_data_frame, corner_radius=10)
+            block.pack(fill="x", pady=5, padx=10)
+            label = ctk.CTkLabel(
+                block,
+                text=f"Date: {sample['date']} | Impact: {sample['impact']}",
+                anchor="w",  # Align text to the left
+                font=("Arial", 12)
+            )
+            label.pack(fill="x", padx=10, pady=5)
 
     def show_calendar(self):
         # Get the current month and year
