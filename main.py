@@ -1,10 +1,15 @@
-print("Welcome to the program!")
+import customtkinter as ctk
+from ui.main_screen import MainScreen
 
-# Example: Ask for user input
-name = input("What's your name? ")
-print(f"Hello, {name}! Nice to meet you.")
+class CryptoAnalysisApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Crypto Analysis Tool")
+        self.geometry("1280x720")  # 16:9 Aspect Ratio
+        self.resizable(False, False)  # Fix window size
+        self.main_screen = MainScreen(self)
+        self.main_screen.pack(fill="both", expand=True)
 
-# Example: Perform a simple calculation
-number = int(input("Enter a number: "))
-result = number * 2
-print(f"Twice {number} is {result}.")
+if __name__ == "__main__":
+    app = CryptoAnalysisApp()
+    app.mainloop()
