@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from calendar import monthcalendar
 from datetime import datetime
+from ui.historical_data_screen import HistoricalDataScreen
 import tkinter as tk
 
 class MainScreen(ctk.CTkFrame):
@@ -12,10 +13,14 @@ class MainScreen(ctk.CTkFrame):
         self.parent.geometry("1280x720")  # Fixed size (16:9 aspect ratio)
         self.parent.resizable(False, False)
 
-        # Center the window on the screen
+        # Center and focus window on startup
         self.center_window()
+        self.parent.lift()  # Bring window to front
+        self.parent.focus_force()  # Grab focus
 
         # Layout Configuration
+        self.grid_rowconfigure(0, weight=2)  # Upper half for indicators and calendar
+        self.grid_rowconfigure(1, weight=1)  # Bottom half for news headlines
         self.grid_columnconfigure(0, weight=1)  # Left: Country and Indicators
         self.grid_columnconfigure(1, weight=2)  # Middle: Historical Data
         self.grid_columnconfigure(2, weight=3)  # Right: Calendar
@@ -57,8 +62,6 @@ class MainScreen(ctk.CTkFrame):
         # Middle: Historical Data Display
         self.historical_data_frame = ctk.CTkFrame(self)
         self.historical_data_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
-        self.historical_data_label = ctk.CTkLabel(self.historical_data_frame, text="", font=("Arial", 14))
-        self.historical_data_label.pack(pady=10)
 
         # Right: Calendar
         self.calendar_frame = ctk.CTkFrame(self, corner_radius=10)
@@ -71,6 +74,11 @@ class MainScreen(ctk.CTkFrame):
         self.calendar_days.pack(pady=20)
 
         self.show_calendar()
+
+        # Bottom: News Headlines
+        self.news_frame = ctk.CTkFrame(self, corner_radius=10)
+        self.news_frame.grid(row=1, column=0, columnspan=3, sticky="nsew", padx=10, pady=10)
+        self.show_news_headlines()
 
     def center_window(self):
         """Center the window on the screen."""
@@ -121,27 +129,44 @@ class MainScreen(ctk.CTkFrame):
         for widget in self.historical_data_frame.winfo_children():
             widget.destroy()
 
-        # Add a title
-        title = ctk.CTkLabel(self.historical_data_frame, text=f"Historical Data for {indicator}", font=("Arial", 16))
-        title.pack(pady=10)
-
-        # Sample Historical Data Blocks
+        # Add sample historical data blocks
         samples = [
             {"date": "2023-01-01", "impact": "Positive"},
             {"date": "2022-12-01", "impact": "Neutral"},
             {"date": "2022-11-01", "impact": "Negative"},
-            {"date": "2022-10-01", "impact": "Positive"},
         ]
 
         for sample in samples:
             block = ctk.CTkFrame(self.historical_data_frame, corner_radius=10)
             block.pack(fill="x", pady=5, padx=10)
-            label = ctk.CTkLabel(
+            button = ctk.CTkButton(
                 block,
                 text=f"Date: {sample['date']} | Impact: {sample['impact']}",
-                anchor="w",  # Align text to the left
-                font=("Arial", 12)
+                anchor="w",
+                command=lambda: self.open_historical_data_screen(sample)
             )
+            button.pack(fill="x", padx=10, pady=5)
+
+    def open_historical_data_screen(self, data):
+        print(f"Opening historical data screen for: {data}")
+        new_window = tk.Toplevel(self.parent)
+        HistoricalDataScreen(new_window, data)
+
+    def show_news_headlines(self):
+        """Display sample news headlines with a softer red background."""
+        sample_headlines = [
+            "Stock markets rally amid economic recovery signs.",
+            "Cryptocurrency regulations tighten globally.",
+            "Major trade agreements boost regional economies.",
+        ]
+
+        # Use a softer red color for the strips
+        soft_red_color = "#FFCCCC"  # Light pastel red
+
+        for headline in sample_headlines:
+            strip = ctk.CTkFrame(self.news_frame, corner_radius=10, height=50, fg_color=soft_red_color)  # Softer red
+            strip.pack(fill="x", pady=5, padx=10)
+            label = ctk.CTkLabel(strip, text=headline, font=("Arial", 12), anchor="w")
             label.pack(fill="x", padx=10, pady=5)
 
     def show_calendar(self):
