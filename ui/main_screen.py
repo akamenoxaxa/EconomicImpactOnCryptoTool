@@ -1,100 +1,80 @@
 import customtkinter as ctk
-from reading import Reading
-from mappings import Mappings
+from data_reader import DataReader
+from metadata_loader import MetadataLoader
+from ui.historical_data_screen import HistoricalDataScreen
 
 class MainScreen(ctk.CTkFrame):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-        self.reading = Reading("data.xlsx")
-        self.mappings = Mappings("indicators_mapping.json")
-        self.selected_country = None
+    def __init__(self, master):
+        super().__init__(master)
+        self.master = master
+        self.data_reader = DataReader("data.xlsx")
+        self.metadata_loader = MetadataLoader("indicators_mapping.json")
+
         self.selected_indicator = None
+        self.selected_country = None
 
-        # UI Configuration
-        self.grid_columnconfigure(0, weight=1)  # Left: Country and Indicators
-        self.grid_columnconfigure(1, weight=2)  # Middle: Historical Data
-        self.grid_columnconfigure(2, weight=3)  # Right: Calendar
+        self.configure_layout()
+        self.populate_indicators()
 
-        # Left: Country and Indicator Selection
-        self.left_frame = ctk.CTkFrame(self, corner_radius=10)
-        self.left_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+    def configure_layout(self):
+        """Configures UI layout with fixed text area size."""
+        self.pack(fill="both", expand=True)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=3)
 
-        # Country Selection
-        self.country_label = ctk.CTkLabel(self.left_frame, text="Choose Country", font=("Arial", 16))
-        self.country_label.pack(pady=10)
+        self.indicator_menu = ctk.CTkOptionMenu(self, values=["Loading..."], command=self.on_indicator_selected)
+        self.indicator_menu.grid(row=0, column=0, padx=20, pady=10)
 
-        self.country_dropdown = ctk.CTkOptionMenu(
-            self.left_frame,
-            values=["US", "CA", "CH", "DE", "JP", "IN", "UK", "FR"],
-            command=self.on_country_selected
-        )
-        self.country_dropdown.pack(pady=10)
+        self.country_menu = ctk.CTkOptionMenu(self, values=["Select Indicator First"], command=self.on_country_selected)
+        self.country_menu.grid(row=1, column=0, padx=20, pady=10)
 
-        # Indicator Selection
-        self.indicator_label = ctk.CTkLabel(self.left_frame, text="Choose Indicator", font=("Arial", 16))
-        self.indicator_label.pack(pady=10)
+        self.data_label = ctk.CTkTextbox(self, wrap="word", width=600, height=250)
+        self.data_label.grid(row=0, column=1, rowspan=3, padx=20, pady=10, sticky="w")
 
-        self.indicator_dropdown = ctk.CTkOptionMenu(
-            self.left_frame,
-            values=self.reading.get_available_indicators(),
-            command=self.on_indicator_selected
-        )
-        self.indicator_dropdown.pack(pady=10)
+        self.chart_button = ctk.CTkButton(self, text="View Historical Chart", command=self.open_chart, state="disabled")
+        self.chart_button.grid(row=3, column=0, padx=20, pady=10)
 
-        # Middle: Historical Data Display
-        self.historical_data_frame = ctk.CTkFrame(self)
-        self.historical_data_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+    def populate_indicators(self):
+        """Populates indicator dropdown dynamically."""
+        indicators = self.data_reader.get_available_indicators()
+        self.indicator_menu.configure(values=indicators)
 
-        self.historical_data_label = ctk.CTkLabel(self.historical_data_frame, text="Historical Data", font=("Arial", 14))
-        self.historical_data_label.pack(pady=10)
+    def on_indicator_selected(self, indicator):
+        """Handles indicator selection."""
+        self.selected_indicator = indicator.strip().upper()
+        countries = self.data_reader.get_available_countries(indicator)
+        self.country_menu.configure(values=countries)
+        self.country_menu.set("Country")
 
     def on_country_selected(self, country):
-        """Handles country selection."""
-        self.selected_country = country
-        print(f"🌍 Country selected: {country}")
-
-    def on_indicator_selected(self, indicator_name):
-        """Handles when an indicator is selected."""
-        if not self.selected_country:
-            print("❌ No country selected.")
-            return
-
-        print(f"🔍 Fetching data for: '{indicator_name}' ({self.selected_country})")
-
-        # Convert indicator names to match JSON keys
-        indicator_name = indicator_name.strip().title()
-
-        # Get the latest data from Excel
-        data = self.reading.get_latest_data(indicator_name, self.selected_country)
-
-        # Get indicator metadata from JSON mappings
-        mapping_data = self.mappings.get_indicator_info(indicator_name, self.selected_country)
-
-        if not mapping_data:
-            print(f"⚠️ No metadata found for '{indicator_name}' ({self.selected_country})")
-            print(f"💡 Available Indicators: {list(self.mappings.data.keys())}")
-        else:
-            print(f"✅ Metadata Found: {mapping_data}")
+        """Handles country selection and displays data."""
+        self.selected_country = country.upper()
+        data = self.data_reader.get_latest_data(self.selected_indicator, self.selected_country)
+        metadata = self.metadata_loader.get_metadata(self.selected_indicator, self.selected_country)
 
         if data:
-            display_text = (
-                f"Latest Data for {indicator_name} ({self.selected_country}):\n"
-                f"Date: {data['date']}\n"
-                f"Actual: {data['actual']}\n"
-                f"Forecast: {data['forecast']}\n"
-                f"Previous: {data['previous']}\n\n"
-                f"Description: {mapping_data.get('description', 'No description available')}\n"
-                f"Derived Via: {mapping_data.get('derived_via', 'No formula available')}\n"
-                f"Acronym: {mapping_data.get('acro', 'No acronym available')}\n"
-                f"Event Type: {mapping_data.get('event_type', 'No event type available')}\n"
-                f"Frequency: {mapping_data.get('frequency', 'No frequency available')}\n"
-                f"Source: {mapping_data.get('source', 'No source available')}\n"
-                f"Usual Effect: {mapping_data.get('usual_effect', 'No effect available')}\n"
-                f"Impact: {mapping_data.get('impact', 'No impact available')}"
-            )
+            display_text = f"Latest {self.selected_indicator} ({self.selected_country}):\n" \
+                           f"Date: {data['date']}\n" \
+                           f"Actual: {data['actual']}\n" \
+                           f"Forecast: {data['forecast']}\n" \
+                           f"Previous: {data['previous']}\n\n" \
+                           f"📌 **Metadata:**\n" \
+                           f"🔹 Description: {metadata['description']}\n" \
+                           f"🔹 Derived Via: {metadata['derived_via']}\n" \
+                           f"🔹 Acronym: {metadata['acro']}\n" \
+                           f"🔹 Event Type: {metadata['event_type']}\n" \
+                           f"🔹 Frequency: {metadata['frequency']}\n" \
+                           f"🔹 Source: {metadata['source']}\n" \
+                           f"🔹 Usual Effect: {metadata['usual_effect']}\n" \
+                           f"🔹 Impact: {metadata['impact']}"
         else:
-            display_text = f"No data found for {indicator_name} ({self.selected_country})."
+            display_text = "No data available."
 
-        print(display_text)  # Debugging
-        self.historical_data_label.configure(text=display_text)
+        self.data_label.delete("1.0", "end")
+        self.data_label.insert("1.0", display_text)
+        self.chart_button.configure(state="normal")
+
+    def open_chart(self):
+        """Opens a new window to display historical data."""
+        if self.selected_indicator and self.selected_country:
+            HistoricalDataScreen(self.selected_indicator, self.selected_country)

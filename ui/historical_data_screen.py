@@ -1,36 +1,50 @@
 import customtkinter as ctk
-from reading import Reading
-from mappings import Mappings
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import pandas as pd
+from data_reader import DataReader
 
-# Initialize classes
-reading = Reading("data.xlsx")
-mappings = Mappings("indicators_mapping.json")
+class HistoricalDataScreen(ctk.CTkToplevel):
+    def __init__(self, indicator, country):
+        super().__init__()
+        self.title(f"Historical Data for {indicator} ({country})")
+        self.geometry("800x500")
 
-class HistoricalDataScreen(ctk.CTkFrame):
-    def __init__(self, parent, indicator, country):
-        super().__init__(parent)
-        self.parent = parent
+        self.data_reader = DataReader("data.xlsx")
         self.indicator = indicator
         self.country = country
 
-        self.label = ctk.CTkLabel(self, text=f"Historical Data for {indicator} ({country})", font=("Arial", 18))
-        self.label.pack(pady=10)
+        self.display_chart()
 
-        self.data_label = ctk.CTkLabel(self, text="", font=("Arial", 14))
-        self.data_label.pack(pady=10)
+    def clean_numeric(self, value):
+        """Removes non-numeric characters and converts to float if possible."""
+        try:
+            if isinstance(value, str):
+                value = value.replace("<", "").replace(">", "").replace("%", "").strip()
+            return float(value)
+        except ValueError:
+            return None  # Return None for invalid data
 
-        self.display_historical_data()
+    def display_chart(self):
+        """Displays a line chart for the historical data."""
+        data = self.data_reader.get_historical_data(self.indicator, self.country)
 
-    def display_historical_data(self):
-        """
-        Fetch and display historical data and indicator information.
-        """
-        data = reading.get_country_data(self.indicator, self.country)
-        indicator_info = mappings.get_indicator_info(self.indicator, self.country)
+        if data is None or data.empty:
+            label = ctk.CTkLabel(self, text="No historical data available.")
+            label.pack(pady=20)
+            return
 
-        if data is not None:
-            display_text = "\n".join(f"{row['date']} | {row['actual']} | {row['forecast']} | {row['previous']}" for _, row in data.iterrows())
-            display_text += f"\n\nSource: {indicator_info['source']}\nImpact: {indicator_info['impact']}"
-            self.data_label.configure(text=display_text)
-        else:
-            self.data_label.configure(text="No historical data found.")
+        # Clean the "ACTUAL" values
+        data["ACTUAL"] = data["ACTUAL"].apply(self.clean_numeric)
+        data = data.dropna(subset=["ACTUAL"])  # Remove rows where conversion failed
+
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.plot(data["DATE"], data["ACTUAL"], marker="o", linestyle="-", color="blue")
+        ax.set_title(f"{self.indicator} Trends ({self.country})")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Actual Value")
+        ax.grid(True)
+
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=True)
