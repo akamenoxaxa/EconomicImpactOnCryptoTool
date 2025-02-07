@@ -6,7 +6,7 @@
                 "Acro": "Consumer Price Index (CPI)",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, about 16 days after the month ends",
-                "Source": "Bureau of Labor Statistics (https://www.bls.gov)",
+                "Source": "https://www.bls.gov",
                 "Usual effect": "Actual less than Forecast is good for crypto",
                 "Impact": "HIGH"
             },
@@ -16,7 +16,7 @@
                 "Acro": "Consumer Price Index (CPI)",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, usually on the third Tuesday after the month ends",
-                "Source": "Statistics Canada (https://www.statcan.gc.ca/en/start)",
+                "Source": "https://www.statcan.gc.ca/en/start",
                 "Usual effect": "No consistent effect - there are both inflationary and growth implications",
                 "Impact": "LOW"
             },
@@ -26,7 +26,7 @@
                 "Acro": "Consumer Price Index (CPI)",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, usually about 10 days after the month ends",
-                "Source": "National Bureau of Statistics of China  (https://www.stats.gov.cn/english/)",
+                "Source": "https://www.stats.gov.cn/english/",
                 "Usual effect": "No consistent effect - there are both inflationary and growth implications",
                 "Impact": "LOW"
             },
@@ -36,7 +36,7 @@
                 "Acro": "Consumer Price Index (CPI)",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, about 3 days after the month ends",
-                "Source": "Federal Statistical Office  (https://www.bfs.admin.ch/bfs/en/home.html)",
+                "Source": "https://www.bfs.admin.ch/bfs/en/home.html",
                 "Usual effect": "No consistent effect - there are both inflationary and growth implications",
                 "Impact": "LOW"
             },
@@ -46,7 +46,7 @@
                 "Acro": "Consumer Price Index (CPI)",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, about 16 days after the month ends",
-                "Source": "Office for National Statistics  (https://www.gov.uk/search/research-and-statistics)",
+                "Source": "https://www.gov.uk/search/research-and-statistics",
                 "Usual effect": "No consistent effect - there are both inflationary and growth implications",
                 "Impact": "LOW"
             },
@@ -56,7 +56,7 @@
                 "Acro": "Consumer Price Index (CPI)",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, about 25 days after the month ends",
-                "Source": "Australian Bureau of Statistics  (https://www.abs.gov.au)",
+                "Source": "https://www.abs.gov.au",
                 "Usual effect": "No consistent effect - there are both inflationary and growth implications",
                 "Impact": "LOW"
             }
@@ -68,7 +68,7 @@
                 "Acro": "Gross Domestic Product (GDP)",
                 "Event type": "Growth",
                 "Frequency": "Released quarterly, about 30 days after the quarter ends",
-                "Source": "Bureau of Economic Analysis (https://www.bea.gov)",
+                "Source": "https://www.bea.gov",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "MEDIUM/HIGH"
             },
@@ -78,7 +78,7 @@
                 "Acro": "Gross Domestic Product (GDP)",
                 "Event type": "Growth",
                 "Frequency": "Released monthly, about 60 days after the month ends",
-                "Source": "Statistics Canada (https://www.statcan.gc.ca/en/start)",
+                "Source": "https://www.statcan.gc.ca/en/start",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -88,7 +88,7 @@
                 "Acro": "Gross Domestic Product (GDP)",
                 "Event type": "Growth",
                 "Frequency": "Released quarterly, about 18 days after the quarter ends",
-                "Source": "National Bureau of Statistics of China  (https://www.stats.gov.cn/english/)",
+                "Source": "https://www.stats.gov.cn/english/",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -98,7 +98,7 @@
                 "Acro": "Gross Domestic Product (GDP)",
                 "Event type": "Growth",
                 "Frequency": "Released monthly, about 40 days after the month ends",
-                "Source": "Office for National Statistics  (https://www.gov.uk/search/research-and-statistics)",
+                "Source": "https://www.gov.uk/search/research-and-statistics",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -108,7 +108,7 @@
                 "Acro": "Gross Domestic Product (GDP)",
                 "Event type": "Growth",
                 "Frequency": "Released quarterly, about 65 days after the quarter ends",
-                "Source": "Australian Bureau of Statistics  (https://www.abs.gov.au)",
+                "Source": "https://www.abs.gov.au",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             }
@@ -120,7 +120,7 @@
                 "Acro": "The Institute for Supply Management (ISM), Purchasing Managers' Index (PMI)",
                 "Event type": "Business Surveys",
                 "Frequency": "Released monthly, on the first business day after the month ends",
-                "Source": "Institute for Supply Management (https://www.ismworld.org)",
+                "Source": "https://www.ismworld.org",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "MEDIUM/HIGH"
             },
@@ -130,7 +130,7 @@
                 "Acro": "The Institute for Supply Management (ISM), Purchasing Managers' Index (PMI)",
                 "Event type": "Business Surveys",
                 "Frequency": "Released monthly, on the last day of the current month",
-                "Source": "China Federation of Logistics and Purchasing (http://en.chinawuliu.com.cn)",
+                "Source": "http://en.chinawuliu.com.cn",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW/MEDIUM"
             }
@@ -142,7 +142,7 @@
                 "Acro": "Federal Open Market Committee (FOMC)",
                 "Event type": "Central Bank",
                 "Frequency": "Scheduled 8 times per year",
-                "Source": "Federal Reserve (https://www.federalreserve.gov)",
+                "Source": "https://www.federalreserve.gov",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "HIGH"
             },
@@ -152,7 +152,7 @@
                 "Acro": "Bank of England (BOE), Monetary Policy Committee (MPC)",
                 "Event type": "Central Bank",
                 "Frequency": "Scheduled monthly",
-                "Source": "Bank of England (https://www.bankofengland.co.uk)",
+                "Source": "https://www.bankofengland.co.uk",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "LOW/MEDIUM"
             },
@@ -162,7 +162,7 @@
                 "Acro": "Bank of Canada (BOC)",
                 "Event type": "Central Bank",
                 "Frequency": "Scheduled 8 times per year",
-                "Source": "Bank of Canada (https://www.bankofcanada.ca)",
+                "Source": "https://www.bankofcanada.ca",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "LOW/MEDIUM"
             },
@@ -172,7 +172,7 @@
                 "Acro": "Reserve Bank of Australia (RBA)",
                 "Event type": "Central Bank",
                 "Frequency": "Scheduled 8 times per year",
-                "Source": "Reserve Bank of Australia (https://www.rba.gov.au)",
+                "Source": "https://www.rba.gov.au",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "LOW"
             },
@@ -182,7 +182,7 @@
                 "Acro": "Bank of Japan (BOJ)",
                 "Event type": "Central Bank",
                 "Frequency": "Scheduled 8 times per year",
-                "Source": "Bank of Japan (https://www.boj.or.jp/en/index.htm)",
+                "Source": "https://www.boj.or.jp/en/index.htm",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "LOW"
             },
@@ -192,7 +192,7 @@
                 "Acro": "Swiss National Bank (SNB)",
                 "Event type": "Central Bank",
                 "Frequency": "Scheduled quarterly",
-                "Source": "Swiss National Bank (https://www.snb.ch/en/)",
+                "Source": "https://www.snb.ch/en/",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
                 "Impact": "LOW"
             }
@@ -204,7 +204,7 @@
                 "Acro": "Customs General Administration of China (CGAC)",
                 "Event type": "Growth",
                 "Frequency": "Released monthly, excluding Feb, about 10 days after the month ends(Source does not have a reliable release schedule - this event will be listed with a date range or as 'Tentative' until the data is released. A positive number indicates that more goods were exported than imported)",
-                "Source": "Customs General Administration of China (http://english.customs.gov.cn)",
+                "Source": "http://english.customs.gov.cn",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -214,7 +214,7 @@
                 "Acro": "",
                 "Event type": "Growth",
                 "Frequency": "Released monthly, about 35 days after the month ends",
-                "Source": "Bureau of Economic Analysis (https://www.bea.gov)",
+                "Source": "https://www.bea.gov",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             }
@@ -226,7 +226,7 @@
                 "Acro": "",
                 "Event type": "Employment",
                 "Frequency": "Released monthly, usually on the first Friday after the month ends",
-                "Source": "Bureau of Labor Statistics (https://www.bls.gov)",
+                "Source": "https://www.bls.gov",
                 "Usual effect": "Actual' greater than 'Forecast' is good for crypto",
                 "Impact": "HIGH"
             }
@@ -238,7 +238,7 @@
                 "Acro": "",
                 "Event type": "Inflation",
                 "Frequency": "Released monthly, usually on the first Friday after the month ends",
-                "Source": "Bureau of Labor Statistics (https://www.bls.gov)",
+                "Source": "https://www.bls.gov",
                 "Usual effect": "Actual' less than 'Forecast' is good for crypto",
                 "Impact": "HIGH"
             }
@@ -250,7 +250,7 @@
                 "Event type": "Growth",
                 "Acro": "",
                 "Frequency": "Released monthly, about 16 days after the month ends",
-                "Source": "Census Bureau (https://www.census.gov)",
+                "Source": "https://www.census.gov",
                 "Usual effect": "Actual' less than 'Forecast' is good for crypto",
                 "Impact": "MEDIUM/HIGH"
             },
@@ -260,7 +260,7 @@
                 "Event type": "Growth",
                 "Acro": "",
                 "Frequency": "Released monthly, excluding Feb, about 15 days after the month ends",
-                "Source": "National Bureau of Statistics of China (https://www.stats.gov.cn/english/)",
+                "Source": "https://www.stats.gov.cn/english/",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -270,7 +270,7 @@
                 "Event type": "Growth",
                 "Acro": "",
                 "Frequency": "Released monthly, about 20 days after the month ends",
-                "Source": "Office for National Statistics (https://www.gov.uk/search/research-and-statistics)",
+                "Source": "https://www.gov.uk/search/research-and-statistics",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -280,7 +280,7 @@
                 "Event type": "Growth",
                 "Acro": "",
                 "Frequency": "Released monthly, about 50 days after the month ends",
-                "Source": "Statistics Canada (https://www.statcan.gc.ca/en/start)",
+                "Source": "https://www.statcan.gc.ca/en/start",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             }
@@ -292,7 +292,7 @@
                 "Acro": "",
                 "Event type": "Growth",
                 "Frequency": "Released monthly, about 16 days after the month ends",
-                "Source": "Federal Reserve (https://www.federalreserve.gov)",
+                "Source": "https://www.federalreserve.gov",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             },
@@ -302,7 +302,7 @@
                 "Acro": "",
                 "Event type": "Growth",
                 "Frequency": "Released monthly, excluding Feb, about 15 days after the month ends",
-                "Source": "National Bureau of Statistics of China (https://www.stats.gov.cn/english/)",
+                "Source": "https://www.stats.gov.cn/english/",
                 "Usual effect": "No consistent effect - there are both risk and growth implications",
                 "Impact": "LOW"
             }
