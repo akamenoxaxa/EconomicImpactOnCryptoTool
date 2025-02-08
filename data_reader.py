@@ -1,9 +1,11 @@
 import pandas as pd
+import os
+import sys
 
 
 class DataReader:
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self, file_name="data.xlsx"):
+        self.file_path = self.get_correct_path(file_name)
         self.data = self.load_data()
 
     def load_data(self):
@@ -63,6 +65,24 @@ class DataReader:
         df["ACTUAL"] = df.apply(lambda row: self.append_parameter(row["ACTUAL"], row["PARAMETER"]), axis=1)
 
         return df[["DATE", "ACTUAL"]]
+
+    def get_correct_path(self, file_name):
+        #Ensures PyInstaller correctly finds the data file inside the .exe bundle
+        if getattr(sys, 'frozen', False):  #Check if running as an .exe
+            base_path = sys._MEIPASS  #PyInstaller temp folder
+        else:
+            base_path = os.path.abspath(".")  #Running as a script
+
+        return os.path.join(base_path, file_name)
+
+    def load_data(self):
+        #Loads all sheets from the Excel file dynamically with normalized names
+        if not os.path.exists(self.file_path):
+            print(f"[ERROR] Data file not found: {self.file_path}")
+            return {}
+
+        sheets = pd.read_excel(self.file_path, sheet_name=None)
+        return {name.strip().upper(): df for name, df in sheets.items()}
 
     @staticmethod
     def append_parameter(value, parameter):

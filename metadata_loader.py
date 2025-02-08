@@ -1,13 +1,32 @@
 import json
+import os
+import sys
 
 class MetadataLoader:
-    def __init__(self, json_path):
-        self.json_path = json_path
+    def __init__(self, file_name="indicators_mapping.json"):
+        self.file_path = self.get_correct_path(file_name)
         self.metadata = self.load_metadata()
 
     def load_metadata(self):
         #Loads metadata from the JSON file
         with open(self.json_path, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+    def get_correct_path(self, file_name):
+        #Ensures PyInstaller correctly finds the metadata file inside the .exe bundle
+        if getattr(sys, 'frozen', False):  #Running as an .exe
+            base_path = sys._MEIPASS  #PyInstaller's temp folder
+        else:
+            base_path = os.path.abspath(".")  #Normal script execution
+
+        return os.path.join(base_path, file_name)
+
+    def load_metadata(self):
+        #Loads the indicators mapping JSON file
+        if not os.path.exists(self.file_path):
+            return {}
+
+        with open(self.file_path, "r", encoding="utf-8") as file:
             return json.load(file)
 
     def get_metadata(self, indicator, country):
