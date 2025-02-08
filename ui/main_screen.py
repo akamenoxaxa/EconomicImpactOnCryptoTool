@@ -8,6 +8,7 @@ import pandas as pd  # Fix missing import
 import matplotlib.ticker as mticker
 import webbrowser
 from ui.date_selector import DateSelector
+import tkinter.filedialog
 
 
 
@@ -96,9 +97,11 @@ class MainScreen(ctk.CTkFrame):
         self.source_button = ctk.CTkButton(self.button_frame, text="Source", command=self.open_source, width=120)
         self.source_button.pack(side="left", padx=5)
 
-        self.by_date_button = ctk.CTkButton(self.button_frame, text="By Date", command=self.open_date_selector,
-                                            width=120)
+        self.by_date_button = ctk.CTkButton(self.button_frame, text="By Date", command=self.open_date_selector, width=120)
         self.by_date_button.pack(side="right", padx=5)
+
+        self.export_chart_button = ctk.CTkButton(self.data_box, text="Export Chart", command=self.export_chart, width=150)
+        self.export_chart_button.pack(pady=5)
 
         # **Metadata Box**
         self.data_label = ctk.CTkTextbox(self.data_display, wrap="word", height=150)
@@ -200,12 +203,12 @@ class MainScreen(ctk.CTkFrame):
         self.impact_label.configure(text=f"⚠️ Impact: {metadata.get('impact', 'N/A')}", text_color=impact_color)
 
         # **Metadata Display**
-        display_text = f"📌 **Description:** {metadata.get('description', 'N/A')}\n" \
-                       f"📖 **Derived Via:** {metadata.get('derived_via', 'N/A')}\n" \
-                       f"🔠 **Acronym:** {metadata.get('acro', 'N/A')}\n" \
-                       f"📅 **Event Type:** {metadata.get('event_type', 'N/A')}\n" \
-                       f"⏳ **Frequency:** {metadata.get('frequency', 'N/A')}\n" \
-                       f"📊 **Usual Effect:** {metadata.get('usual_effect', 'N/A')}"
+        display_text = f"Description: {metadata.get('description', 'N/A')}\n" \
+                       f"Derived Via: {metadata.get('derived_via', 'N/A')}\n" \
+                       f"Acronym: {metadata.get('acro', 'N/A')}\n" \
+                       f"Event Type: {metadata.get('event_type', 'N/A')}\n" \
+                       f"Frequency: {metadata.get('frequency', 'N/A')}\n" \
+                       f"Usual Effect: {metadata.get('usual_effect', 'N/A')}"
 
         self.data_label.delete("1.0", "end")
         self.data_label.insert("1.0", display_text)
@@ -322,6 +325,26 @@ class MainScreen(ctk.CTkFrame):
         self.chart_canvas.get_tk_widget().pack(fill="both", expand=True)
 
         print("[INFO] Chart successfully displayed.")
+
+    def export_chart(self):
+        """Exports the currently displayed chart as an image file."""
+        if not self.chart_canvas:
+            print("[ERROR] No chart available to export.")
+            return
+
+        # Ask user where to save the file
+        file_path = tkinter.filedialog.asksaveasfilename(
+            defaultextension=".png",
+            filetypes=[("PNG Image", "*.png"), ("JPEG Image", "*.jpg"), ("PDF Document", "*.pdf")],
+            title="Save Chart As"
+        )
+
+        if not file_path:  # User canceled the save dialog
+            return
+
+        # Save the chart as an image
+        self.chart_canvas.figure.savefig(file_path, dpi=300)
+        print(f"[INFO] Chart successfully exported to {file_path}")
 
     @staticmethod
     def clean_number_display(value):
