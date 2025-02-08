@@ -23,7 +23,7 @@ class MainScreen(ctk.CTkFrame):
         self.populate_indicators()
 
     def configure_layout(self):
-        """Configures the UI layout properly to use full window space."""
+        """Configures the UI layout properly and hides elements on startup."""
         self.grid(row=0, column=0, sticky="nsew")
         self.columnconfigure(0, weight=3)  # Chart 70%
         self.columnconfigure(1, weight=1)  # Data 30%
@@ -50,16 +50,17 @@ class MainScreen(ctk.CTkFrame):
         self.main_frame.columnconfigure(0, weight=3)  # Chart 70%
         self.main_frame.columnconfigure(1, weight=1)  # Data 30%
         self.main_frame.rowconfigure(0, weight=1)
+        self.main_frame.grid_remove()  # **Hide everything at startup**
 
-        # **Chart Frame (Left Side, 70%)**
+        # **Chart Frame (Left Side)**
         self.chart_frame = ctk.CTkFrame(self.main_frame, corner_radius=8)
         self.chart_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-        # **Data Display (Right Side, 30%)**
+        # **Data Display (Right Side)**
         self.data_display = ctk.CTkFrame(self.main_frame, corner_radius=8, width=350)
         self.data_display.grid(row=0, column=1, padx=10, pady=10, sticky="ns")
 
-        # **Title (Auto-Resize Text)**
+        # **Title Label**
         self.title_label = ctk.CTkLabel(self.data_display, text="Choose Indicator", font=("Arial", 22, "bold"),
                                         anchor="center", wraplength=300)
         self.title_label.pack(pady=5)
@@ -68,7 +69,7 @@ class MainScreen(ctk.CTkFrame):
         self.impact_label = ctk.CTkLabel(self.data_display, text="", font=("Arial", 18, "bold"))
         self.impact_label.pack(pady=10)
 
-        # **Data Box (Fixed Size)**
+        # **Data Box**
         self.data_box = ctk.CTkFrame(self.data_display, width=300, height=180, corner_radius=8)
         self.data_box.pack_propagate(False)  # Prevent resizing
         self.data_box.pack(pady=10, padx=10)
@@ -95,8 +96,15 @@ class MainScreen(ctk.CTkFrame):
         self.indicator_menu.configure(values=indicators)
 
     def on_indicator_selected(self, indicator):
-        """Handles indicator selection and creates country buttons dynamically."""
+        """Handles indicator selection, showing UI elements when an indicator is chosen."""
         self.selected_indicator = indicator.strip().upper()
+
+        # If the user selects "Choose Indicator", keep everything hidden
+        if self.selected_indicator == "CHOOSE INDICATOR":
+            self.country_buttons_frame.grid_remove()
+            self.main_frame.grid_remove()  # **Keep main UI hidden**
+            return
+
         self.title_label.configure(text=self.selected_indicator)
 
         countries = self.data_reader.get_available_countries(indicator)
@@ -106,7 +114,7 @@ class MainScreen(ctk.CTkFrame):
             widget.destroy()
         self.country_buttons.clear()
 
-        # Hide country buttons frame if no countries
+        # Hide country buttons frame if no countries exist
         if not countries:
             self.country_buttons_frame.grid_remove()
             return
@@ -119,6 +127,9 @@ class MainScreen(ctk.CTkFrame):
             self.country_buttons[country] = btn
 
         self.country_buttons_frame.grid()
+
+        # **Show UI elements when an indicator is selected**
+        self.main_frame.grid()
 
     def on_country_selected(self, country):
         """Handles country selection and updates UI with data."""
