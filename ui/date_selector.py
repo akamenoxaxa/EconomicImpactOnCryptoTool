@@ -1,6 +1,5 @@
 import customtkinter as ctk
 import pandas as pd
-from datetime import datetime
 
 
 class DateSelector(ctk.CTkToplevel):
@@ -33,7 +32,7 @@ class DateSelector(ctk.CTkToplevel):
         self.result_label.pack(pady=20)
 
     def get_available_years(self):
-        """Fetches available years from the dataset."""
+        #Fetches available years from the dataset
         data = self.data_reader.get_historical_data(self.indicator, self.country)
         if data is None or data.empty:
             return []
@@ -42,11 +41,11 @@ class DateSelector(ctk.CTkToplevel):
         return sorted(data["DATE"].dt.year.dropna().astype(str).unique(), reverse=True)
 
     def get_available_months(self):
-        """Returns months in 'MM' format."""
+        #Returns months in 'MM' format
         return [str(i).zfill(2) for i in range(1, 13)]  # ['01', '02', ..., '12']
 
     def fetch_data(self):
-        """Fetches data for the selected year and month."""
+        #Fetches data for the selected year and month
         selected_year = self.year_var.get()
         selected_month = self.month_var.get()
 
@@ -54,7 +53,7 @@ class DateSelector(ctk.CTkToplevel):
             self.result_label.configure(text="Please select a valid year and month", text_color="red")
             return
 
-        # Fetch historical data
+        #Fetch historical data
         data = self.data_reader.get_historical_data(self.indicator, self.country)
         if data is None or data.empty:
             self.result_label.configure(text="No data available", text_color="red")
@@ -63,7 +62,7 @@ class DateSelector(ctk.CTkToplevel):
         data["DATE"] = pd.to_datetime(data["DATE"], errors="coerce")
         selected_date = f"{selected_year}-{selected_month}"
 
-        # Filter for selected date
+        #Filter for selected date
         filtered_data = data[data["DATE"].dt.strftime("%Y-%m") == selected_date]
 
         if not filtered_data.empty:

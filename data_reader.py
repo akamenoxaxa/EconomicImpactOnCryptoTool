@@ -7,23 +7,23 @@ class DataReader:
         self.data = self.load_data()
 
     def load_data(self):
-        """Loads all sheets from the Excel file dynamically with normalized names."""
+        #Loads all sheets from the Excel file dynamically with normalized names
         sheets = pd.read_excel(self.file_path, sheet_name=None)
         return {name.strip().upper(): df for name, df in sheets.items()}
 
     def get_available_indicators(self):
-        """Returns all sheet names as available indicators."""
+        #Returns all sheet names as available indicators
         return list(self.data.keys())
 
     def get_available_countries(self, indicator):
-        """Returns a list of unique countries available for the selected indicator."""
+        #Returns a list of unique countries available for the selected indicator
         indicator = indicator.strip().upper()
         if indicator in self.data and "COUNTRY" in self.data[indicator]:
             return sorted(self.data[indicator]["COUNTRY"].dropna().unique())
         return []
 
     def get_latest_data(self, indicator, country):
-        """Fetches the latest available data for a given indicator and country."""
+        #Fetches the latest available data for a given indicator and country
         indicator = indicator.strip().upper()
         if indicator not in self.data:
             return None
@@ -46,7 +46,7 @@ class DataReader:
         }
 
     def get_historical_data(self, indicator, country):
-        """Fetches all historical data for a given indicator and country."""
+        #Fetches all historical data for a given indicator and country
         indicator = indicator.strip().upper()
         if indicator not in self.data:
             return None
@@ -66,7 +66,7 @@ class DataReader:
 
     @staticmethod
     def append_parameter(value, parameter):
-        """Appends the corresponding parameter (e.g., %, B) to the value without modifying the numeric value."""
+        #Appends the corresponding parameter (e.g., %, B) to the value without modifying the numeric value
         if pd.isna(value) or pd.isna(parameter):
             return str(value)  # Keeps NaN values as is
 

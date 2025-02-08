@@ -1,7 +1,6 @@
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import pandas as pd
 from data_reader import DataReader
 
 class HistoricalDataScreen(ctk.CTkToplevel):
@@ -17,16 +16,16 @@ class HistoricalDataScreen(ctk.CTkToplevel):
         self.display_chart()
 
     def clean_numeric(self, value):
-        """Removes non-numeric characters and converts to float if possible."""
+        #Removes non-numeric characters and converts to float if possible
         try:
             if isinstance(value, str):
                 value = value.replace("<", "").replace(">", "").replace("%", "").strip()
             return float(value)
         except ValueError:
-            return None  # Return None for invalid data
+            return None  #Return None for invalid data
 
     def display_chart(self):
-        """Displays a line chart for the historical data."""
+        #Displays a line chart for the historical data
         data = self.data_reader.get_historical_data(self.indicator, self.country)
 
         if data is None or data.empty:
@@ -34,9 +33,9 @@ class HistoricalDataScreen(ctk.CTkToplevel):
             label.pack(pady=20)
             return
 
-        # Clean the "ACTUAL" values
+        #Clean the "ACTUAL" values
         data["ACTUAL"] = data["ACTUAL"].apply(self.clean_numeric)
-        data = data.dropna(subset=["ACTUAL"])  # Remove rows where conversion failed
+        data = data.dropna(subset=["ACTUAL"])  #Remove rows where conversion failed
 
         fig, ax = plt.subplots(figsize=(8, 4))
         ax.plot(data["DATE"], data["ACTUAL"], marker="o", linestyle="-", color="blue")

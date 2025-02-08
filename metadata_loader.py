@@ -6,12 +6,12 @@ class MetadataLoader:
         self.metadata = self.load_metadata()
 
     def load_metadata(self):
-        """Loads metadata from the JSON file."""
+        #Loads metadata from the JSON file
         with open(self.json_path, "r", encoding="utf-8") as file:
             return json.load(file)
 
     def get_metadata(self, indicator, country):
-        """Retrieves metadata for a given indicator and country."""
+        #Retrieves metadata for a given indicator and country
         indicator = indicator.strip().upper()
         country = country.upper()
 

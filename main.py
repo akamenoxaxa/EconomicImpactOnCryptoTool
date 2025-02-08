@@ -6,7 +6,7 @@ class CryptoAnalysisApp(ctk.CTk):
         super().__init__()
         self.title("Crypto Analysis Tool")
         self.geometry("1280x720")  # 16:9 Aspect Ratio
-        self.resizable(False, False)  # Fix window size
+        self.resizable(False, False)
         self.main_screen = MainScreen(self)
         self.main_screen.pack(fill="both", expand=True)
 
