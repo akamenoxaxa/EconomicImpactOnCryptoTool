@@ -6,6 +6,9 @@ from data_reader import DataReader
 from metadata_loader import MetadataLoader
 import pandas as pd  # Fix missing import
 import matplotlib.ticker as mticker
+import webbrowser
+from ui.date_selector import DateSelector
+
 
 
 class MainScreen(ctk.CTkFrame):
@@ -69,7 +72,7 @@ class MainScreen(ctk.CTkFrame):
         self.impact_label = ctk.CTkLabel(self.data_display, text="", font=("Arial", 18, "bold"))
         self.impact_label.pack(pady=10)
 
-        # **Data Box**
+        # **Data Box (With Values & Buttons)**
         self.data_box = ctk.CTkFrame(self.data_display, width=300, height=180, corner_radius=8)
         self.data_box.pack_propagate(False)  # Prevent resizing
         self.data_box.pack(pady=10, padx=10)
@@ -86,9 +89,46 @@ class MainScreen(ctk.CTkFrame):
         self.previous_label = ctk.CTkLabel(self.data_box, text="Previous: ", font=("Arial", 14))
         self.previous_label.pack()
 
+        # **New Buttons Inside `data_box` - Styled Like the UI**
+        self.button_frame = ctk.CTkFrame(self.data_box)  # Frame for button alignment
+        self.button_frame.pack(pady=5)
+
+        self.source_button = ctk.CTkButton(self.button_frame, text="Source", command=self.open_source, width=120)
+        self.source_button.pack(side="left", padx=5)
+
+        self.by_date_button = ctk.CTkButton(self.button_frame, text="By Date", command=self.open_date_selector,
+                                            width=120)
+        self.by_date_button.pack(side="right", padx=5)
+
         # **Metadata Box**
         self.data_label = ctk.CTkTextbox(self.data_display, wrap="word", height=150)
         self.data_label.pack(fill="both", expand=True, padx=10, pady=10)
+
+    def open_source(self):
+        """Opens the source link from metadata in the default browser."""
+        if not self.selected_indicator or not self.selected_country:
+            print("[ERROR] No indicator or country selected.")
+            return  # Exit if no selection
+
+        # Retrieve metadata for the selected indicator and country
+        metadata = self.metadata_loader.get_metadata(self.selected_indicator, self.selected_country)
+
+        # Extract source URL
+        source_url = metadata.get("source", "").strip()
+
+        if source_url:
+            print(f"[INFO] Opening source URL: {source_url}")
+            webbrowser.open(source_url)  # Open URL in browser
+        else:
+            print("[ERROR] No source URL found in metadata.")
+
+    def open_date_selector(self):
+        """Opens the date selection window."""
+        if self.selected_indicator and self.selected_country:
+            print(f"[INFO] Opening DateSelector for {self.selected_indicator} ({self.selected_country})")
+            DateSelector(self.selected_indicator, self.selected_country, self.data_reader)
+        else:
+            print("[ERROR] No indicator or country selected.")
 
     def populate_indicators(self):
         """Loads indicators dynamically from the Excel file."""
