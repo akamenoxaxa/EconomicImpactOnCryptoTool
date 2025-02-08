@@ -13,9 +13,9 @@ class MetadataLoader:
             return json.load(file)
 
     def get_correct_path(self, file_name):
-        #Ensures PyInstaller correctly finds the metadata file inside the .exe bundle
+        #Ensures the program finds indicators_mapping.json in the same directory as the .exe
         if getattr(sys, 'frozen', False):  #Running as an .exe
-            base_path = sys._MEIPASS  #PyInstaller's temp folder
+            base_path = os.path.dirname(sys.executable)  #Path of the .exe file
         else:
             base_path = os.path.abspath(".")  #Normal script execution
 
@@ -24,7 +24,7 @@ class MetadataLoader:
     def load_metadata(self):
         #Loads the indicators mapping JSON file
         if not os.path.exists(self.file_path):
-            return {}
+            raise FileNotFoundError(f"[ERROR] Metadata file not found: {self.file_path}")
 
         with open(self.file_path, "r", encoding="utf-8") as file:
             return json.load(file)

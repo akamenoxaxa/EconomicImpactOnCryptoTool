@@ -67,19 +67,18 @@ class DataReader:
         return df[["DATE", "ACTUAL"]]
 
     def get_correct_path(self, file_name):
-        #Ensures PyInstaller correctly finds the data file inside the .exe bundle
-        if getattr(sys, 'frozen', False):  #Check if running as an .exe
-            base_path = sys._MEIPASS  #PyInstaller temp folder
+        #Ensures the program finds data.xlsx in the same directory as the .exe
+        if getattr(sys, 'frozen', False):  #Running as an .exe
+            base_path = os.path.dirname(sys.executable)  #Path of the .exe file
         else:
-            base_path = os.path.abspath(".")  #Running as a script
+            base_path = os.path.abspath(".")  #Normal script execution
 
         return os.path.join(base_path, file_name)
 
     def load_data(self):
         #Loads all sheets from the Excel file dynamically with normalized names
         if not os.path.exists(self.file_path):
-            print(f"[ERROR] Data file not found: {self.file_path}")
-            return {}
+            raise FileNotFoundError(f"[ERROR] Data file not found: {self.file_path}")
 
         sheets = pd.read_excel(self.file_path, sheet_name=None)
         return {name.strip().upper(): df for name, df in sheets.items()}
