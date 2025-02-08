@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class DataReader:
     def __init__(self, file_path):
         self.file_path = file_path
@@ -39,9 +40,9 @@ class DataReader:
 
         return {
             "date": latest_entry["DATE"].strftime("%Y-%m-%d"),
-            "actual": self.format_numeric_value(latest_entry["ACTUAL"]),
-            "forecast": self.format_numeric_value(latest_entry["FORECAST"]),
-            "previous": self.format_numeric_value(latest_entry["PREVIOUS"])
+            "actual": self.append_parameter(latest_entry["ACTUAL"], latest_entry["PARAMETER"]),
+            "forecast": self.append_parameter(latest_entry["FORECAST"], latest_entry["PARAMETER"]),
+            "previous": self.append_parameter(latest_entry["PREVIOUS"], latest_entry["PARAMETER"])
         }
 
     def get_historical_data(self, indicator, country):
@@ -59,23 +60,14 @@ class DataReader:
         df["DATE"] = pd.to_datetime(df["DATE"], errors="coerce")
         df = df.sort_values(by="DATE", ascending=True)
 
+        df["ACTUAL"] = df.apply(lambda row: self.append_parameter(row["ACTUAL"], row["PARAMETER"]), axis=1)
+
         return df[["DATE", "ACTUAL"]]
 
     @staticmethod
-    def format_numeric_value(value):
-        """Converts values to human-readable format, handling billions (B), millions (M), and percentages."""
-        try:
-            if isinstance(value, str):
-                value = value.replace(",", "").strip()
+    def append_parameter(value, parameter):
+        """Appends the corresponding parameter (e.g., %, B) to the value without modifying the numeric value."""
+        if pd.isna(value) or pd.isna(parameter):
+            return str(value)  # Keeps NaN values as is
 
-                if value.endswith("B"):  # Convert billions
-                    return f"{float(value.replace('B', '')):.2f}B"
-                elif value.endswith("M"):  # Convert millions
-                    return f"{float(value.replace('M', '')):.2f}M"
-                elif "%" in value or "<" in value or ">" in value:  # Handle percentage values
-                    value = value.replace("<", "").replace(">", "").replace("%", "").strip()
-                    return f"{float(value):.2f}%"
-
-            return float(value)
-        except ValueError:
-            return "N/A"
+        return f"{value}{parameter.strip()}" if isinstance(parameter, str) else str(value)

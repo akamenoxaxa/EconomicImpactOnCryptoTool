@@ -184,7 +184,7 @@
                 "Frequency": "Scheduled 8 times per year",
                 "Source": "https://www.boj.or.jp/en/index.htm",
                 "Usual effect": "Actual less than 'Forecast' is good for crypto",
-                "Impact": "LOW"
+                "Impact": "HIGH"
             },
             "SZ": {
                 "Description": "Interest rate the SNB seeks to maintain in the short-term money market",
